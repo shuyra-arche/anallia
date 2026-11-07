@@ -11,8 +11,8 @@ test.beforeAll(async () => {
   server = createServer(async (request, response) => {
     try {
       const path = decodeURIComponent(new URL(request.url!, "http://localhost").pathname);
-      const prefix = path.startsWith("/Anallia/") ? "/Anallia/" : path.startsWith("/preview/") ? "/preview/" : "/";
-      const root = prefix === "/preview/" ? resolve("preview") : resolve(exportsRoot, prefix === "/Anallia/" ? "pages" : "normal");
+      const prefix = path.startsWith("/preview/") ? "/preview/" : "/";
+      const root = prefix === "/preview/" ? resolve("preview") : resolve(exportsRoot, "normal");
       const file = resolve(root, path.slice(prefix.length) || "index.html");
       if (!file.startsWith(root + sep)) { response.writeHead(403).end(); return; }
       const body = await readFile(file);
@@ -27,13 +27,13 @@ test.beforeAll(async () => {
 });
 test.afterAll(async () => { if (server) await new Promise<void>((resolve, reject) => server.close(error => error ? reject(error) : resolve())); });
 
-for (const form of ["normal", "pages", "preview", "single-file"]) {
+for (const form of ["normal", "preview", "single-file"]) {
   test(`production ${form} serves bundled content without development hooks`, async ({ page }) => {
     test.skip(!exportsRoot, "Build all export forms and set SHUYRA_EXPORT_ROOT");
     const errors: string[] = [], requests: string[] = [];
     page.on("pageerror", error => errors.push(error.message));
     page.on("request", request => { if (/^https?:/.test(request.url())) requests.push(request.url()); });
-    const base = form === "single-file" ? pathToFileURL(resolve("demo.html")).href : origin + (form === "pages" ? "/Anallia/" : form === "preview" ? "/preview/" : "/");
+    const base = form === "single-file" ? pathToFileURL(resolve("demo.html")).href : origin + (form === "preview" ? "/preview/" : "/");
     if (form === "single-file") await page.context().setOffline(true);
     const renderer = form === "single-file" ? "auto" : "gpu";
     await page.goto(`${base}?renderer=${renderer}`);
