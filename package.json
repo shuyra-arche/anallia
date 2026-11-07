@@ -9,7 +9,7 @@
     "test": "node tools/test.mjs",
     "build": "npm run check && vite build",
     "preview": "vite preview --host 0.0.0.0 --port 4173 --strictPort",
-    "build:pages": "npm run build -- --base=/Anallia/",
+    "build:pages": "npm run build -- --base=/",
     "test:browser": "node tools/browser-test.mjs",
     "content:generate": "node tools/content-manifest.mjs",
     "content:check": "node tools/content-manifest.mjs --check",

@@ -24,7 +24,9 @@ npm run test:browser   # 浏览器交互回归，需 Playwright 浏览器环境
 
 首页 `/` 是空间读本「潮汐之间」。声音默认关闭，支持系统减少动效。
 `/dev/legacy.html` 与 `/dev/multi-reader.html` 保留开发回归入口。
-生产 Pages 构建使用 `npm run build:pages`，单文件导出使用
+发布页为 <https://anallia.shuyra.link/>：`npm run build:pages` 以站点根路径
+为 base 产出 Pages 版本，推送到 `main` 后由
+`.github/workflows/pages.yml` 部署。单文件导出使用
 `node tools/build-single-html.mjs`。
 
 ## 代码与接口
